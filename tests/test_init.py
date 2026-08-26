@@ -131,6 +131,31 @@ async def test_set_max_current(
     assert post[2] == {"maxCurrent": 10}
 
 
+async def test_commands_send_a_json_body(
+    hass: HomeAssistant, aioclient_mock, config_entry, charger
+) -> None:
+    """The API rejects a bodyless POST with 415, so always send JSON."""
+    aioclient_mock.get(f"{API_BASE}/chargers", json=[charger])
+    await _setup(hass, config_entry)
+
+    aioclient_mock.post(
+        f"{API_BASE}/chargers/{CHARGER_ID}/commands/stop-charging", text=""
+    )
+    await hass.services.async_call(
+        "switch",
+        "turn_off",
+        {"entity_id": "switch.garasje_charging"},
+        blocking=True,
+    )
+    post = next(
+        call
+        for call in aioclient_mock.mock_calls
+        if str(call[1]).endswith("stop-charging")
+    )
+    # aioclient_mock records the json= payload as the third tuple element.
+    assert post[2] == {}
+
+
 async def test_unload(
     hass: HomeAssistant, aioclient_mock, config_entry, charger
 ) -> None:
