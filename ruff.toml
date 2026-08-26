@@ -1,0 +1,14 @@
+target-version = "py313"
+line-length = 88
+
+[lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "ASYNC", "RUF", "D"]
+ignore = ["D203", "D213"]
+
+[lint.per-file-ignores]
+"tests/*" = ["D"]
+
+[lint.isort]
+force-sort-within-sections = true
+known-first-party = ["custom_components"]
+combine-as-imports = true
