@@ -48,9 +48,16 @@ class EnuaChargingSwitch(EnuaEntity, SwitchEntity):
 
     @property
     def is_on(self) -> bool | None:
-        """Return whether a charging transaction is open."""
-        value = self.charger.get("hasActiveTransaction")
-        return bool(value) if isinstance(value, bool) else None
+        """Return whether the charger is actually delivering current.
+
+        The API's own `hasActiveTransaction` is not usable here: it stays true
+        after charging has been stopped, and even after the vehicle reports
+        itself disconnected, which leaves the switch stuck on. Control pilot
+        state C is the signal that current is flowing. The raw flag is still
+        exposed as the "Active session" binary sensor.
+        """
+        state = self.charger.get("vehicleState")
+        return state == "C" if state is not None else None
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Start charging."""
