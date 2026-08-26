@@ -38,7 +38,7 @@ automatically. You only sign in with your own Enua account.
 ### HACS (recommended)
 
 1. HACS → three-dot menu → **Custom repositories**.
-2. Repository: `https://github.com/stianandre/ha-enua`, category **Integration**.
+2. Repository: `https://github.com/stianandre100/ha-enua`, category **Integration**.
 3. Install **Enua Charge**, then restart Home Assistant.
 4. **Settings → Devices & services → Add integration → Enua Charge**.
 5. Sign in with your Enua account and approve access.
@@ -67,6 +67,20 @@ What differs per instance is only *which Enua user signs in*:
 
 If several instances should see the same chargers, share the chargers in the
 Enua app with each account instead of reusing one login.
+
+### One gotcha: My Home Assistant points at a single instance
+
+The redirect goes through `my.home-assistant.io`, and that page remembers
+**one** instance URL, stored in the browser you are signing in from. If it
+points at a different Home Assistant than the one you are configuring, the
+sign-in ends on `Invalid state. Is My Home Assistant configured to go to the
+right instance?` and the flow fails.
+
+Before adding the integration on a second or third instance, open
+<https://my.home-assistant.io> in the browser you will use, click the pencil,
+and set the URL to the instance you are about to configure. Point it back
+afterwards if you use My links for another instance. Using a separate browser
+profile per instance avoids the switching entirely.
 
 ---
 
@@ -133,6 +147,7 @@ Energy**.
 | --- | --- |
 | `no_url_available` when adding | The `my` integration is disabled and no external URL is set |
 | Sign-in page shows a redirect URI error | The `my` integration is disabled, so Home Assistant sent an unregistered redirect URI |
+| `Invalid state. Is My Home Assistant configured to go to the right instance?` | my.home-assistant.io points at a different instance - see the section above |
 | Setup succeeds but "no chargers" | The Enua account has never signed in to the app, or owns no chargers |
 | Entities go unavailable with `401` | Refresh failed — the integration will ask you to sign in again |
 | Frequent `429` | Increase the polling interval |

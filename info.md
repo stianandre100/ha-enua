@@ -7,4 +7,4 @@ creates one device per charger with sensors for vehicle state, power, session
 energy, per-phase current and voltage, plus a charging switch and a max-current
 control.
 
-See the [README](https://github.com/stianandre/ha-enua) for setup requirements.
+See the [README](https://github.com/stianandre100/ha-enua) for setup requirements.
