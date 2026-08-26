@@ -115,14 +115,18 @@ One device per charger.
 
 | Entity | Endpoint |
 | --- | --- |
-| Charging (switch) | `POST /chargers/{id}/commands/start-charging` and `stop-charging` |
+| Charging (switch) | `POST /chargers/{id}/commands/start-charging` and `stop-charging`. Its state reflects whether current is actually flowing (control pilot state C), not the API's `hasActiveTransaction` |
 | Max current (number) | `POST /chargers/{id}/commands/set-max-current`, 6–32 A |
 
-> **Note on scopes.** Enua currently grants the `Charger.Read` scope. The
-> command endpoints are documented under the same OAuth2 security scheme, but
-> if your token turns out not to be authorised for them the integration will
-> report a clear error and you should ask Enua for a write scope. Read-only
-> entities are unaffected.
+> **Note on scopes.** The command endpoints work with the `Charger.Read` scope
+> Enua grants - no separate write scope is needed. Verified against real
+> hardware.
+
+> **Note on `hasActiveTransaction`.** The API keeps this flag true after
+> charging has been stopped, and even after the vehicle reports itself
+> disconnected, so it is not a usable "is charging" signal. The *Charging*
+> switch and binary sensor therefore use the control pilot state instead. The
+> raw flag is exposed as the *Active session* binary sensor if you want it.
 
 ---
 
