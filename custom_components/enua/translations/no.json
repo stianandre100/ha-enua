@@ -1,0 +1,94 @@
+{
+  "config": {
+    "step": {
+      "pick_implementation": {
+        "title": "Velg autentiseringsmetode"
+      },
+      "reauth_confirm": {
+        "title": "Logg inn på nytt hos Enua",
+        "description": "Enua-integrasjonen må logge inn på nytt."
+      }
+    },
+    "abort": {
+      "already_configured": "Denne Enua-kontoen er allerede satt opp.",
+      "already_in_progress": "Oppsettet er allerede i gang.",
+      "authorize_url_timeout": "Tidsavbrudd ved generering av Enua-innloggingslenken.",
+      "missing_configuration": "Enua-integrasjonen er ikke riktig konfigurert.",
+      "no_url_available": "Ingen URL tilgjengelig. Home Assistant trenger en ekstern URL, eller at My Home Assistant-integrasjonen er aktivert, for å fullføre innloggingen.",
+      "oauth_error": "Fikk ugyldig token-svar fra Enua.",
+      "oauth_failed": "Feil ved henting av access token fra Enua.",
+      "oauth_timeout": "Tidsavbrudd ved henting av access token fra Enua.",
+      "oauth_unauthorized": "Enua avviste token-forespørselen. Sjekk at client-ID og redirect-URI er registrert.",
+      "reauth_successful": "Ny innlogging mot Enua var vellykket.",
+      "user_rejected_authorize": "Innloggingen ble avbrutt: {error}"
+    },
+    "create_entry": {
+      "default": "Innlogging mot Enua vellykket."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Enua-innstillinger",
+        "data": {
+          "scan_interval": "Oppdateringsintervall (sekunder)"
+        },
+        "data_description": {
+          "scan_interval": "Hvor ofte Home Assistant henter nye laderdata fra Enua-skyen. API-et er rate-limitert per IP-adresse, så hold denne over 10 sekunder."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "online": { "name": "Tilkoblet" },
+      "cable_connected": { "name": "Kabel tilkoblet" },
+      "charging": { "name": "Lader" },
+      "active_transaction": { "name": "Aktiv ladeøkt" },
+      "problem": { "name": "Feil" }
+    },
+    "number": {
+      "max_current": { "name": "Maks strøm" }
+    },
+    "sensor": {
+      "vehicle_state": {
+        "name": "Kjøretøystatus",
+        "state": {
+          "not_connected": "Ikke tilkoblet",
+          "connected": "Tilkoblet",
+          "charging": "Lader",
+          "error": "Feil"
+        }
+      },
+      "power": { "name": "Effekt" },
+      "session_energy": { "name": "Energi denne økten" },
+      "l1_current": { "name": "Strøm L1" },
+      "l2_current": { "name": "Strøm L2" },
+      "l3_current": { "name": "Strøm L3" },
+      "l1_voltage": { "name": "Spenning L1" },
+      "l2_voltage": { "name": "Spenning L2" },
+      "l3_voltage": { "name": "Spenning L3" },
+      "charger_max_current": { "name": "Laderens maks strøm" },
+      "vehicle_max_current": { "name": "Kjøretøyets maks strøm" },
+      "cable_lock": {
+        "name": "Kabellås",
+        "state": {
+          "locked": "Låst",
+          "unlocked": "Ulåst",
+          "error": "Feil"
+        }
+      },
+      "wall_mount_lock": {
+        "name": "Veggfestelås",
+        "state": {
+          "locked": "Låst",
+          "unlocked": "Ulåst",
+          "error": "Feil"
+        }
+      }
+    },
+    "switch": {
+      "charging": { "name": "Lading" }
+    }
+  }
+}
