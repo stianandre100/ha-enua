@@ -54,12 +54,19 @@ class EnuaApiClient:
         await self._oauth_session.async_ensure_token_valid()
         token = self._oauth_session.token["access_token"]
 
+        # The command endpoints take no documented body, but the API still
+        # rejects a bodyless POST with 415 Unsupported Media Type. Always send
+        # a JSON body on POST so the Content-Type header is present.
+        payload = json
+        if method == "POST" and payload is None:
+            payload = {}
+
         url = f"{API_BASE}{path}"
         try:
             response = await self._session.request(
                 method,
                 url,
-                json=json,
+                json=payload,
                 headers={
                     "Authorization": f"Bearer {token}",
                     "Accept": "application/json",
