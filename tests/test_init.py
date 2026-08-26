@@ -40,11 +40,25 @@ async def test_setup_creates_entities(
     assert hass.states.get("binary_sensor.garasje_charging").state == "on"
     assert hass.states.get("binary_sensor.garasje_cable_connected").state == "on"
     assert hass.states.get("binary_sensor.garasje_problem").state == "off"
+    # The switch mirrors control pilot state C, not hasActiveTransaction.
     assert hass.states.get("switch.garasje_charging").state == "on"
     assert hass.states.get("number.garasje_max_current").state == "16.0"
 
     # 15.5*230 + 15.4*231 + 15.6*229 = 3565 + 3557.4 + 3572.4 = 10694.8
     assert hass.states.get("sensor.garasje_power").state == "10694.8"
+
+
+async def test_switch_ignores_a_stale_active_transaction(
+    hass: HomeAssistant, aioclient_mock, config_entry, charger
+) -> None:
+    """hasActiveTransaction stays true after stopping, the switch must not."""
+    charger = {**charger, "vehicleState": "A", "hasActiveTransaction": True}
+    aioclient_mock.get(f"{API_BASE}/chargers", json=[charger])
+    await _setup(hass, config_entry)
+
+    assert hass.states.get("switch.garasje_charging").state == "off"
+    # The raw API flag is still available on its own entity.
+    assert hass.states.get("binary_sensor.garasje_active_session").state == "on"
 
 
 async def test_setup_not_ready_without_chargers(
